@@ -40,9 +40,9 @@ jobs:
         id: docker_move
         run: |
           mkdir v2ray
-          docker create -ti --name v2ray sebuild/v2ray:${{ steps.get_version.outputs.VERSION }} sh
-          docker cp v2ray:/v2ray ./v2ray
-          docker rm -f v2ray
+          docker create -ti --name v2ray-container sebuild/v2ray:${{ steps.get_version.outputs.VERSION }} sh
+          docker cp v2ray-container:/usr/bin/v2ray ./v2ray
+          docker rm -f v2ray-container
 
       - name: Pack up artifact
         id: package
