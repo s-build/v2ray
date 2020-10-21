@@ -2,9 +2,6 @@
 
 set -ex
 
-apt update
-apt install -y zip git curl
-
 GIT_TAG="v4.28.2"
 git clone -b ${GIT_TAG} https://github.com/v2fly/v2ray-core.git
 
