@@ -42,7 +42,7 @@ jobs:
           mkdir v2ray
           docker create -ti --name v2ray sebuild/v2ray:${{ steps.get_version.outputs.VERSION }} sh
           docker cp v2ray:/v2ray ./v2ray
-          docker rm -f dummy
+          docker rm -f v2ray
 
       - name: package up v2ray
         id: package
