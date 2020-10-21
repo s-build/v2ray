@@ -24,9 +24,12 @@ jobs:
           fi
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
+      - name: create symlink
+        run: sudo ln -f -s $GOROOT/bin/* /usr/bin/
+
       - name: Build the v2ray app
         id: build
-        run: ./build.sh
+        run: sudo ./build.sh
 
       - name: package up v2ray
         id: package
