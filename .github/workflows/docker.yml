@@ -36,6 +36,10 @@ jobs:
       - name: Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
+  release:
+    needs: [docker]
+    runs-on: ubuntu-latest
+    steps:
       - name: Move artifact to host
         id: docker_move
         run: |
