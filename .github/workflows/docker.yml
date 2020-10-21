@@ -30,7 +30,7 @@ jobs:
           push: true
           context: v2ray
           file: v2ray/Dockerfile
-          tags: ${{ github.actor }}/v2ray:${{ steps.get_version.outputs.VERSION }}
+          tags: sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
