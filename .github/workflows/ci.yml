@@ -47,7 +47,7 @@ jobs:
         id: docker_move
         run: |
           mkdir v2ray
-          docker create -ti --name v2ray-container sebuild/v2ray:${{ needs.docker.outputs.VERSION }} sh
+          docker create --name v2ray-container sebuild/v2ray:${{ needs.docker.outputs.VERSION }} sh
           docker cp v2ray-container:/usr/bin/v2ray ./v2ray
           docker rm -f v2ray-container
 
