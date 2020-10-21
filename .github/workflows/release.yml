@@ -26,7 +26,7 @@ jobs:
 
       - name: Build the v2ray app
         id: build
-        run: sudo ./build.sh
+        run: ./build.sh
 
       - name: package up v2ray
         id: package
