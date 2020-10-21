@@ -1,4 +1,4 @@
-FROM golang:1.15 as builder
+FROM golang:1.15.3 as builder
 COPY build.sh /
 RUN /build.sh
 
