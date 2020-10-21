@@ -42,8 +42,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.output.sha_short }}
-          release_name: Release ${{ steps.get_version.output.sha_short }}
+          tag_name: ${{ steps.get_version.outputs.sha_short }}
+          release_name: Release ${{ steps.get_version.outputs.sha_short }}
           draft: false
           prerelease: false
 
