@@ -2,20 +2,14 @@
 
 set -ex
 
-apt update
-apt install -y zip git curl
+GIT_TAG="v4.31.2"
+git clone -b ${GIT_TAG} https://github.com/v2fly/v2ray-core.git
 
-# will download src to /go/src
-# fix HEAD
-go get -insecure -v -t -d v2ray.com/core/...
-cd $(go env var GOPATH)/src/v2ray.com/core
-git checkout tags/v4.28.2
-
-# build package
-# https://github.com/v2ray/v2ray-core/blob/master/release/user-package.sh
 mkdir -p /v2ray
 LDFLAGS="-s -w"
-env CGO_ENABLED=0 go build -o /v2ray/v2ray -ldflags "$LDFLAGS" ./main
-env CGO_ENABLED=0 go build -o /v2ray/v2ctl -tags confonly -ldflags "$LDFLAGS" ./infra/control/main
-curl -s -L -o /v2ray/geoip.dat "https://github.com/v2ray/geoip/raw/release/geoip.dat"
-curl -s -L -o /v2ray/geosite.dat "https://github.com/v2ray/domain-list-community/raw/release/dlc.dat"
+
+cd v2ray-core
+
+env CGO_ENABLED=0 go build -o /v2ray/v2ray -trimpath -ldflags "$LDFLAGS" ./main
+env CGO_ENABLED=0 go build -o /v2ray/v2ctl -trimpath -tags confonly -ldflags "$LDFLAGS" ./infra/control/main
+cp ./release/config/*.dat /v2ray/
