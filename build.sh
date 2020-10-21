@@ -3,6 +3,7 @@
 set -ex
 
 GIT_TAG="v4.31.2"
+cd $(go env GOPATH)
 git clone -b ${GIT_TAG} https://github.com/v2fly/v2ray-core.git
 
 mkdir -p /v2ray
