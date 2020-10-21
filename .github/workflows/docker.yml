@@ -33,10 +33,10 @@ jobs:
           file: Dockerfile
           tags: sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
-      - name: Image digest
+      - name: Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-      - name: move file to v2ray
+      - name: Move artifact to host
         id: docker_move
         run: |
           mkdir v2ray
@@ -44,7 +44,7 @@ jobs:
           docker cp v2ray:/v2ray ./v2ray
           docker rm -f v2ray
 
-      - name: package up v2ray
+      - name: Pack up artifact
         id: package
         run: tar -czvf v2ray.tar.gz ./v2ray
 
