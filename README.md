@@ -6,9 +6,7 @@ this is a repo to build docker image and v2ray packages transparently within git
 
 The image will be pushed to [sebuild/v2ray](https://hub.docker.com/repository/docker/sebuild/v2ray)
 
-## TODO
 
- - [ ] only release on tag(and check&build on sha).
 
 # Build status
 
