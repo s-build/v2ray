@@ -11,6 +11,6 @@ LDFLAGS="-s -w"
 cd v2ray-core
 
 go env
-env CGO_ENABLED=0 go build -o /v2ray/v2ray -trimpath -ldflags "$LDFLAGS" ./main
-env CGO_ENABLED=0 go build -o /v2ray/v2ctl -trimpath -tags confonly -ldflags "$LDFLAGS" ./infra/control/main
+env CGO_ENABLED=0 GOMODCACHE="$(go env GOPATH)/pkg/mod" go build -o /v2ray/v2ray -trimpath -ldflags "$LDFLAGS" ./main
+env CGO_ENABLED=0 GOMODCACHE="$(go env GOPATH)/pkg/mod" go build -o /v2ray/v2ctl -trimpath -tags confonly -ldflags "$LDFLAGS" ./infra/control/main
 cp ./release/config/*.dat /v2ray/
