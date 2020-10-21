@@ -8,7 +8,7 @@ apt install -y zip git curl
 # will download src to /go/src
 # fix HEAD
 go get -insecure -v -t -d v2ray.com/core/...
-cd ./src/v2ray.com/core
+cd $(go env var GOPATH)/src/v2ray.com/core
 git checkout tags/v4.28.2
 
 # build package
