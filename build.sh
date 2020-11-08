@@ -2,7 +2,7 @@
 
 set -ex
 
-GIT_TAG="v4.32.0"
+GIT_TAG="v4.32.1"
 git clone -b ${GIT_TAG} https://github.com/v2fly/v2ray-core.git
 
 mkdir -p /v2ray
