@@ -5,9 +5,6 @@ on: [push, release]
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      sha_short: ${{ steps.get_version.outputs.sha_short }}
-      VERSION: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Docker Buildx
@@ -27,7 +24,6 @@ jobs:
           else
             echo ::set-output name=VERSION::${v}
           fi
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
       - name: Build and Push
         id: docker_build
@@ -40,36 +36,31 @@ jobs:
       - name: Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  release-tar-gz:
-    needs: [docker-build-and-push]
-    if: startsWith(github.ref, 'refs/tags')
-    runs-on: ubuntu-latest
-    steps:
       - name: Move artifact to host
-        id: docker_move
+        if: startsWith(github.ref, 'refs/tags')
         run: |
           mkdir v2ray
-          docker create --name v2ray-container sebuild/v2ray:${{ needs.docker-build-and-push.outputs.VERSION }} sh
+          docker create --name v2ray-container builder sh
           docker cp v2ray-container:/usr/bin/v2ray ./v2ray
           docker rm -f v2ray-container
 
       - name: Pack up artifact
-        id: package
+        if: startsWith(github.ref, 'refs/tags')
         run: tar -czvf v2ray.tar.gz ./v2ray
 
       - name: Create Release
-        id: create_release
+        if: startsWith(github.ref, 'refs/tags')
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.docker-build-and-push.outputs.VERSION }}
-          release_name: Release ${{ needs.docker-build-and-push.outputs.VERSION }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: false
 
       - name: Upload Release Asset
-        id: upload-release-asset
+        if: startsWith(github.ref, 'refs/tags')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
