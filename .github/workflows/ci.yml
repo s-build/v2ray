@@ -63,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.docker-build-and-push.outputs.sha_short }}
-          release_name: Release ${{ needs.docker-build-and-push.outputs.sha_short }}
+          tag_name: ${{ needs.docker-build-and-push.outputs.VERSION }}
+          release_name: Release ${{ needs.docker-build-and-push.outputs.VERSION }}
           draft: false
           prerelease: false
 
