@@ -41,7 +41,7 @@ jobs:
 
   release:
     needs: [docker]
-    if: ${{ github.event_name == 'release' }}
+    if: ${{ github.event.release.tag_name }}
     runs-on: ubuntu-latest
     steps:
       - name: Move artifact to host
