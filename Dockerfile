@@ -1,8 +1,3 @@
-FROM golang:1.15.5 as builder
-COPY build.sh /
-RUN /build.sh
-
-
 FROM alpine:latest
 
 ENV TZ=Asia/Shanghai
