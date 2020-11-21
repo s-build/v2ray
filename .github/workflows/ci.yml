@@ -37,7 +37,7 @@ jobs:
           tags: sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
       - name: debug action
-        uses: hmarr/debug-action@v1
+        uses: hmarr/debug-action@v1.0.0
 
       - name: Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
