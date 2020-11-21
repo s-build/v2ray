@@ -41,7 +41,7 @@ jobs:
         # if: startsWith(github.ref, 'refs/tags')
         run: |
           mkdir v2ray
-          docker create --name v2ray-container . sh
+          docker create --name v2ray-container sebuild/v2ray:${{ steps.get_version.outputs.VERSION }} sh
           docker cp v2ray-container:/usr/bin/v2ray ./v2ray
           docker rm -f v2ray-container
 
