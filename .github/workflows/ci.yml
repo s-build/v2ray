@@ -31,7 +31,7 @@ jobs:
         with:
           push: false
           file: DockerfileBuilder
-          tags: builder
+          tags: builder:ED0C6428
 
       - name: Copy from builder and push
         id: docker_push

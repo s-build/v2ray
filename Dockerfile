@@ -2,7 +2,7 @@ FROM alpine:latest
 
 ENV TZ=Asia/Shanghai
 
-COPY --from=builder /v2ray /usr/bin/v2ray
+COPY --from=builder:ED0C6428 /v2ray /usr/bin/v2ray
 
 RUN set -ex && \
     apk --no-cache add ca-certificates && \
