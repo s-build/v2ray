@@ -1,6 +1,4 @@
-FROM golang:1.15.5 as builder
-COPY build.sh /
-RUN /build.sh
+FROM builder:ED0C6428 as builder
 
 
 FROM alpine:latest
