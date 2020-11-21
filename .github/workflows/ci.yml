@@ -37,7 +37,8 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Move artifact to host
-        if: startsWith(github.ref, 'refs/tags')
+        # FIXME: just for test remove comment afterwards
+        # if: startsWith(github.ref, 'refs/tags')
         run: |
           mkdir v2ray
           docker create --name v2ray-container builder sh
