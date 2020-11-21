@@ -57,13 +57,21 @@ jobs:
         if: startsWith(github.ref, 'refs/tags')
         run: |
           mkdir v2ray
+          mkdir v2ray-darwin-amd64
+          mkdir v2ray-darwin-arm64
           docker create --name v2ray-container builder:ED0C6428 sh
           docker cp v2ray-container:/v2ray ./v2ray
+          docker cp v2ray-container:/v2ray-darwin-amd64 ./v2ray-darwin-amd64
+          docker cp v2ray-container:/v2ray-darwin-arm64 ./v2ray-darwin-arm64
           docker rm -f v2ray-container
 
       - name: Pack up artifact
         if: startsWith(github.ref, 'refs/tags')
-        run: tar -czvf v2ray.tar.gz ./v2ray
+        run: |
+          mkdir assets
+          tar -czvf v2ray.tar.gz ./v2ray
+          tar -czvf v2ray-darwin-amd64.tar.gz ./v2ray-darwin-amd64
+          tar -czvf v2ray-darwin-arm64.tar.gz ./v2ray-darwin-arm64
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags')
@@ -86,4 +94,26 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: v2ray.tar.gz
           asset_name: v2ray.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: v2ray-darwin-amd64.tar.gz
+          asset_name: v2ray-darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: v2ray-darwin-arm64.tar.gz
+          asset_name: v2ray-darwin-arm64.tar.gz
           asset_content_type: application/gzip
