@@ -17,6 +17,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Get the version
         id: get_version
         run: |
@@ -28,6 +29,9 @@ jobs:
           fi
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
+      - name: debug action
+        uses: hmarr/debug-action
+
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v2
@@ -35,9 +39,6 @@ jobs:
           push: true
           file: Dockerfile
           tags: sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
-
-      - name: debug action
-        uses: hmarr/debug-action@v1.0.0
 
       - name: Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
