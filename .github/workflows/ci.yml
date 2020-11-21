@@ -34,15 +34,18 @@ jobs:
           tags: builder
 
       - name: Copy from builder and push
-        id: docker_build
+        id: docker_push
         uses: docker/build-push-action@v2
         with:
           push: true
           file: Dockerfile
           tags: sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
-      - name: Image Digest
+      - name: docker Builder Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: docker push Digest
+        run: echo ${{ steps.docker_push.outputs.digest }}
 
       - name: Move artifact to host
         # FIXME: just for test remove comment afterwards
