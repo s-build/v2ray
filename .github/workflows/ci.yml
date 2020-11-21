@@ -29,11 +29,6 @@ jobs:
           fi
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-      - name: debug action
-        run: |
-          env
-          cat "$GITHUB_EVENT_PATH" | jq -M .
-
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v2
@@ -54,7 +49,7 @@ jobs:
         id: docker_move
         run: |
           mkdir v2ray
-          docker create --name v2ray-container sebuild/v2ray:${{ needs.docker.outputs.VERSION }} sh
+          docker create --name v2ray-container sebuild/v2ray:${{ needs.docker-build-and-push.outputs.VERSION }} sh
           docker cp v2ray-container:/usr/bin/v2ray ./v2ray
           docker rm -f v2ray-container
 
@@ -68,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.docker.outputs.sha_short }}
-          release_name: Release ${{ needs.docker.outputs.sha_short }}
+          tag_name: ${{ needs.docker-build-and-push.outputs.sha_short }}
+          release_name: Release ${{ needs.docker-build-and-push.outputs.sha_short }}
           draft: false
           prerelease: false
 
