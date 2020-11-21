@@ -30,7 +30,9 @@ jobs:
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
       - name: debug action
-        uses: hmarr/debug-action
+        run: |
+          env
+          cat "$GITHUB_EVENT_PATH" | jq -M .
 
       - name: Build and Push
         id: docker_build
