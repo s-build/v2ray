@@ -1,8 +1,11 @@
+FROM builder:ED0C6428 as builder
+
+
 FROM alpine:latest
 
 ENV TZ=Asia/Shanghai
 
-COPY --from=builder:ED0C6428 /v2ray /usr/bin/v2ray
+COPY --from=builder /v2ray /usr/bin/v2ray
 
 RUN set -ex && \
     apk --no-cache add ca-certificates && \
