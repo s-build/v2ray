@@ -27,15 +27,15 @@ jobs:
             echo ::set-output name=VERSION::${v}
           fi
 
-      - name: Docker Build
-        id: docker_build
+      - name: Compile v2ray
+        id: compile_v2ray
         uses: docker/build-push-action@v2
         with:
           file: DockerfileBuilder
           tags: builder:ED0C6428
 
-      - name: Copy from builder and push
-        id: docker_push
+      - name: Copy from builder and build v2ray for amd64 linux
+        id: build_image
         uses: docker/build-push-action@v2
         with:
           file: Dockerfile
@@ -48,10 +48,10 @@ jobs:
         run: docker push sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
       - name: docker Builder Digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+        run: echo ${{ steps.compile_v2ray.outputs.digest }}
 
       - name: docker push Digest
-        run: echo ${{ steps.docker_push.outputs.digest }}
+        run: echo ${{ steps.build_image.outputs.digest }}
 
       - name: Move artifact to host
         if: startsWith(github.ref, 'refs/tags')
