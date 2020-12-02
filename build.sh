@@ -10,9 +10,10 @@ LDFLAGS="-s -w"
 cd v2ray-core
 
 env
-while read -r GOOS_GOARCH; do
+while IFS=' ' read -r GOOS_GOARCH; do
+    echo ${GOOS_GOARCH}
     while IFS='-' read -r GOOS GOARCH; do
-        env
+        echo ${GOOS} ${GOARCH}
         go build -o /v2ray-${GOOS_GOARCH}/v2ray -trimpath -ldflags "$LDFLAGS" ./main
         go build -o /v2ray-${GOOS_GOARCH}/v2ctl -trimpath -tags confonly -ldflags "$LDFLAGS" ./infra/control/main
         cp ./release/config/*.dat /v2ray-${GOOS_GOARCH}/
