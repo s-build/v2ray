@@ -54,11 +54,11 @@ jobs:
         if: startsWith(github.ref, 'refs/tags')
         run: |
           docker create --name v2ray-container builder:ED0C6428 sh
-          while IFS=' ' read -r GOOS_GOARCH; do
+          for GOOS_GOARCH in ${GOOS_GOARCHS}; do
               mkdir v2ray-${GOOS_GOARCH}
               docker cp v2ray-container:/v2ray-${GOOS_GOARCH} ./v2ray-${GOOS_GOARCH}
               tar -czvf v2ray-${GOOS_GOARCH}.tar.gz ./v2ray-${GOOS_GOARCH}
-          done <<< ${GOOS_GOARCHS}
+          done
           docker rm -f v2ray-container
 
       - name: Create Release

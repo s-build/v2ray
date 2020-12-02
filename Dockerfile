@@ -6,7 +6,6 @@ FROM alpine:latest
 ENV TZ=Asia/Shanghai
 
 COPY --from=builder /v2ray-linux-amd64 /usr/bin/v2ray
-COPY --from=builder ~/v2ray-core/release/config/*.dat /usr/bin/v2ray
 
 RUN set -ex && \
     apk --no-cache add ca-certificates && \
