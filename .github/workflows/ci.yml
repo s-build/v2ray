@@ -57,7 +57,7 @@ jobs:
       - name: docker push Digest
         run: echo ${{ steps.build_image.outputs.digest }}
 
-      - name: Move artifact to host
+      - name: Move artifact to host and pack up artifact
         if: startsWith(github.ref, 'refs/tags')
         run: |
           docker create --name v2ray-container builder:ED0C6428 sh
@@ -65,21 +65,9 @@ jobs:
           do
               mkdir v2ray-${GOOS_GOARCH}
               docker cp v2ray-container:/v2ray-${GOOS_GOARCH} ./v2ray-${GOOS_GOARCH}
-              docker cp v2ray-container:~/v2ray-core/release/config/*.dat ./v2ray-${GOOS_GOARCH}
-              while IFS='-' read -r GOOS GOARCH; do
-
-              done <<< $GOOS_GOARCH
-          done
-
-          docker rm -f v2ray-container
-
-      - name: Pack up artifact
-        if: startsWith(github.ref, 'refs/tags')
-        run: |
-          for GOOS_GOARCH in $GOOS_GOARCHS
-          do
               tar -czvf v2ray-${GOOS_GOARCH}.tar.gz ./v2ray-${GOOS_GOARCH}
           done
+          docker rm -f v2ray-container
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags')
