@@ -32,7 +32,7 @@ jobs:
       - name: Compile v2ray
         id: compile_v2ray
         run: |
-          docker build -t builder:ED0C6428 --build-arg GOOS_GOARCHS="${{ env.GOOS_GOARCHS }}" -f DockerfileBuilder
+          docker build -t builder:ED0C6428 --build-arg GOOS_GOARCHS="${{ env.GOOS_GOARCHS }}" -f DockerfileBuilder .
 
       - name: Copy from builder and build v2ray for amd64 linux
         id: build_image
