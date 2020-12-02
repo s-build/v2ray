@@ -3,4 +3,5 @@ FROM golang:1.15.5 as builder
 
 ENV GOOS_GOARCHS=$GOOS_GOARCHS
 COPY build.sh /
+RUN env
 RUN /build.sh
