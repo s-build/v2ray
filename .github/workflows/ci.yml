@@ -38,7 +38,7 @@ jobs:
         with:
           file: DockerfileBuilder
           tags: builder:ED0C6428
-          build-args: GOOS_GOARCHS="${{ env.GOOS_GOARCHS }}"
+          build-args: --build-args GOOS_GOARCHS=${{ env.GOOS_GOARCHS }}
 
       - name: Copy from builder and build v2ray for amd64 linux
         id: build_image
