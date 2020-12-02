@@ -29,16 +29,10 @@ jobs:
             echo ::set-output name=VERSION::${v}
           fi
 
-      - name: remove me
-        run: echo ${GOOS_GOARCHS}
-
       - name: Compile v2ray
         id: compile_v2ray
-        uses: docker/build-push-action@v2.2.0
-        with:
-          file: DockerfileBuilder
-          tags: builder:ED0C6428
-          build-args: --build-args GOOS_GOARCHS=${{ env.GOOS_GOARCHS }}
+        run: |
+          docker build -f DockerfileBuilder -t builder:ED0C6428 --build-args GOOS_GOARCHS=${{ env.GOOS_GOARCHS }}
 
       - name: Copy from builder and build v2ray for amd64 linux
         id: build_image
@@ -52,9 +46,6 @@ jobs:
 
       - name: Push image
         run: docker push sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
-
-      - name: docker Builder Digest
-        run: echo ${{ steps.compile_v2ray.outputs.digest }}
 
       - name: docker push Digest
         run: echo ${{ steps.build_image.outputs.digest }}
