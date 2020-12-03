@@ -4,7 +4,9 @@ on: [push, release]
 
 jobs:
   docker-build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    env:
+      GOOS_GOARCHS: darwin-amd64 linux-amd64 linux-arm64
     steps:
       - uses: actions/checkout@v2
       - name: Set up Docker Buildx
@@ -29,10 +31,8 @@ jobs:
 
       - name: Compile v2ray
         id: compile_v2ray
-        uses: docker/build-push-action@v2
-        with:
-          file: DockerfileBuilder
-          tags: builder:ED0C6428
+        run: |
+          docker build -t builder:ED0C6428 --build-arg GOOS_GOARCHS="${{ env.GOOS_GOARCHS }}" -f DockerfileBuilder .
 
       - name: Copy from builder and build v2ray for amd64 linux
         id: build_image
@@ -47,59 +47,29 @@ jobs:
       - name: Push image
         run: docker push sebuild/v2ray:${{ steps.get_version.outputs.VERSION }}
 
-      - name: docker Builder Digest
-        run: echo ${{ steps.compile_v2ray.outputs.digest }}
-
       - name: docker push Digest
         run: echo ${{ steps.build_image.outputs.digest }}
 
-      - name: Move artifact to host
+      - name: Move artifact to host and pack up artifact
         if: startsWith(github.ref, 'refs/tags')
         run: |
-          mkdir v2ray
-          mkdir v2ray-darwin-amd64
           docker create --name v2ray-container builder:ED0C6428 sh
-          docker cp v2ray-container:/v2ray ./v2ray
-          docker cp v2ray-container:/v2ray-darwin-amd64 ./v2ray-darwin-amd64
+          for GOOS_GOARCH in ${GOOS_GOARCHS}; do
+              mkdir v2ray-${GOOS_GOARCH}
+              docker cp v2ray-container:/v2ray-${GOOS_GOARCH} ./v2ray-${GOOS_GOARCH}
+              tar -czvf v2ray-${GOOS_GOARCH}.tar.gz ./v2ray-${GOOS_GOARCH}
+          done
           docker rm -f v2ray-container
 
-      - name: Pack up artifact
+      - name: Upload all assets
         if: startsWith(github.ref, 'refs/tags')
         run: |
-          mkdir assets
-          tar -czvf v2ray.tar.gz ./v2ray
-          tar -czvf v2ray-darwin-amd64.tar.gz ./v2ray-darwin-amd64
-
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags')
-        id: create_release
-        uses: actions/create-release@v1
+          set -x
+          assets=()
+          for asset in ./*.tar.gz; do
+            assets+=("-a" "$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: v2ray.tar.gz
-          asset_name: v2ray.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: v2ray-darwin-amd64.tar.gz
-          asset_name: v2ray-darwin-amd64.tar.gz
-          asset_content_type: application/gzip

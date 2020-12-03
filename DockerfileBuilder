@@ -1,3 +1,5 @@
+ARG GOOS_GOARCHS=linux-arm64
 FROM golang:1.15.5 as builder
+ARG GOOS_GOARCHS
 COPY build.sh /
-RUN /build.sh
+RUN bash /build.sh
