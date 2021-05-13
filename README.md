@@ -6,7 +6,7 @@ the version rules will follow the [~~v2ray~~](https://github.com/v2ray/v2ray-cor
 
 The image will be pushed to [sebuild/v2ray](https://hub.docker.com/repository/docker/sebuild/v2ray)
 
-Recommend docker image: `sebuild/v2ray:v4.35.1`
+Recommend docker image: `sebuild/v2ray:v4.39.1`
 
 # Build status
 
