@@ -2,7 +2,7 @@
 
 set -ex
 
-GIT_TAG="v4.40.1"
+GIT_TAG="v4.43.0"
 git clone -b ${GIT_TAG} https://github.com/v2fly/v2ray-core.git
 
 LDFLAGS="-s -w"
