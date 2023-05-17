@@ -16,4 +16,4 @@ RUN set -ex && \
 
 ENV PATH /usr/bin/v2ray:$PATH
 
-CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
+CMD ["/usr/bin/v2ray/v2ray", "run", "-config=/etc/v2ray/config.json"]
