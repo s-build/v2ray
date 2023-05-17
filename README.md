@@ -10,5 +10,4 @@ Recommend docker image: `sebuild/v2ray:v4.44.0`
 
 # Build status
 
-- ![Docker Build Status](https://github.com/s-build/v2ray/workflows/docker/badge.svg)
-- ![Release Status](https://github.com/s-build/v2ray/workflows/release/badge.svg)
+- ![CI Status](https://github.com/s-build/v2ray/workflows/ci/badge.svg)
